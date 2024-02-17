@@ -9,7 +9,7 @@ interface Todo {
   isComplete: boolean;
 }
 
-const allTodo: Todo[] = JSON.parse(localStorage.getItem("todos") || "[]");
+let allTodo: Todo[] = JSON.parse(localStorage.getItem("todos") || "[]");
 
 const handleSubmit = (event: Event) => {
   event.preventDefault();
@@ -29,20 +29,29 @@ const addTodoToDom = (todo: Todo) => {
   todoList.insertAdjacentHTML(
     "afterbegin",
     `
-        <li>
-            ${todo.title}<span class="icon"><i class="fas fa-trash"></i></span>
-        </li>
+    <li>
+      ${todo.title}<span onclick="removeTodo('${todo.id}')" class="icon"><i class="fas fa-trash"></i></span>
+    </li>
     `
   );
 };
 
-window.addEventListener("DOMContentLoaded", () => {
+const renderHandler = () => {
   allTodo.forEach((todo) => addTodoToDom(todo));
-});
+};
+
+window.addEventListener("DOMContentLoaded", renderHandler);
 
 addTodo.addEventListener("click", (event) => handleSubmit(event));
 
 const saveTodos = () => {
   localStorage.setItem("todos", JSON.stringify(allTodo));
   return true;
+};
+
+const removeTodo = (todoId: string) => {
+  allTodo = allTodo.filter((todo) => todo.id !== todoId);
+  saveTodos();
+  todoList.innerHTML = "";
+  renderHandler();
 };
