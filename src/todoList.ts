@@ -55,3 +55,9 @@ const removeTodo = (todoId: string) => {
   todoList.innerHTML = "";
   renderHandler();
 };
+
+cleareTodos.addEventListener("click", () => {
+  todoList.innerHTML = "";
+  localStorage.clear();
+  allTodo = [];
+});
